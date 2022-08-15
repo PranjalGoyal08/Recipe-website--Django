@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content%}
+
+<h1>Search Result:</h1>
+<ul>
+
+    {% for post in object_list %}
+    <div class="recipes" style="margin:0 auto ;">
+        
+        <div class="card mb-3" >
+            <div class="row g-0">
+                <div class="col-md-4" >
+                    {% if post.recipe_image %}
+                <img src="{{post.recipe_image.url}}" class="img-fluid rounded-start" alt="This image cannot be loaded" style="margin: 10px;">
+                {% else%}
+                <div>no image is uploaded</div>
+                {% endif %}
+                
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">  {{post.title}}<br/> <small style="font-size: 13px;">By: {{post.author.first_name}} {{post.author.last_name}}</small></h5>
+                    <p class="card-text"> {{post.description}}<br/>
+                        <a href="{% url 'article-detail' post.pk %}" style="font-size: 15px;">read more...</a><small>{% if user.is_authenticated %}{%if user.id == post.author.id %}  - <a href="{% url 'update-recipe' post.pk %}">(edit)</a>  <a href="{% url 'delete-recipe' post.pk %}">(Delete)</a>{% endif %}{% endif %}</small>
+                    </p>
+                    <p class="card-text"><small class="text-muted"><small style="font-size: 13px;">Created on </small>{{post.post_date}}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+<p>No Result found</p>
+{% endfor %}
+</ul>
+{% endblock %}

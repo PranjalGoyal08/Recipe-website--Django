@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Delete Recipe {% endblock %}
+
+
+{% block content%}
+{% if user.is_authenticated %}
+{% if user.id == post.author.id %}
+<h1 style="text-align: center; padding:2px; margin: 15px;">Delete your recipe</h1>
+<div class="form-group" style="text-align: center;">
+<h3>Delete: {{ post.title }}</h3>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <button class="btn btn-secondary">Delete</button>
+</div>
+{% else %}
+<p>You are not allowed</p>
+
+{% endif %}
+{% endif %}
+
+
+{% endblock %}

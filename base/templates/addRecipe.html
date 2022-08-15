@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Add recipes {% endblock %}
+
+
+{% block content%}
+{% if user.is_authenticated %}
+<h1 style="text-align: center; padding:2px; margin: 15px;">Add Your Recipe
+</h1>
+<div class="form-group">
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{form.media}}
+        {{form.as_p}}
+        <button class="btn btn-secondary">Post</button>
+</div>
+
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById('elder').value=name;
+</script>
+{% else %}
+<p>You are not LogedIn/Register</p>
+
+{% endif %}
+
+{% endblock %}
