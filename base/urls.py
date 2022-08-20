@@ -1,4 +1,3 @@
-from unicodedata import name
 from django.urls import path
 from . import views
 from . views import HomeView, ArticleDetailView, AddRecipeView,UpdateRecipeView, DeleteRecipeView,SearchResultView, LikeView, UnlikeView
@@ -12,4 +11,6 @@ urlpatterns = [
     path('search/', SearchResultView.as_view(), name="search-recipe"),
     path('like/<int:pk>', LikeView, name="like_post"),
     path('unlike/<int:pk>', UnlikeView, name="unliked_post"),
+    path('addingrident/', views.create_ingrident_recipe, name='addingrident'),
+    # path('add', views.AddRecipe.as_view(), name='recipe-add'),
 ]

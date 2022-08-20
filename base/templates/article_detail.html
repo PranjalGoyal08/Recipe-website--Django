@@ -10,46 +10,51 @@
 
 <h1 style="text-align:center; padding:20px; margin: 10px;">{{ post.title }}</h1>
 <div style="display: flex; flex-direction:row; justify-content: space-between;">
-    <div style="font-size: 15px;"> 
+    <div style="font-size: 15px;">
         {% if user.is_authenticated %}
         {%if user.id == post.author.id %}
-        <button class="btn btn-primary" >
+        <button class="btn btn-primary">
             <a href="{% url 'update-recipe' post.pk %}" style="color: white; text-decoration: none;">Edit</a>
         </button>
         <button class="btn btn-primary">
             <a href="{% url 'delete-recipe' post.pk %}" style="color: white; text-decoration: none;">Delete</a>
         </button>
-            {% endif %}
-            {% endif %}
+        {% endif %}
+        {% endif %}
     </div>
-    <div style="font-size: 15px; margin-top:15px;"> By: {{ post.author.first_name}} {{ post.author.last_name}} - {{ post.post_date }}
+    <div style="font-size: 15px; margin-top:15px;"> By: {{ post.author.first_name}} {{ post.author.last_name}} - {{
+        post.post_date }}
     </div>
 </div>
 <hr>
 <div style="text-align: center; padding: 30px;">
     {% if post.recipe_image %}
-       <img src="{{post.recipe_image.url}}" alt="" style="width: 80%; height:500px;">
-    {% endif %}</div>
+    <img src="{{post.recipe_image.url}}" alt="" style="width: 80%; height:500px;">
+    {% endif %}
+</div>
 <div style="padding: 50px 20px;">
     {{ post.description }}
 </div>
 
 <div style="border:1px solid grey; padding:20px; box-shadow:0 4px 8px 2px rgba(32, 0, 0, 0.2), 0 6px 20px 5px rgba(40, 17, 17, 0.19);">
-    {{post.ingridents|safe}}<br/>
+    {% for i in ingrident_info %}
+    <div>{{i.name}} - {{i.quantity}}- {{i.unit}}</div>
+    {% endfor %}
 </div>
+
 <div style="padding:50px 20px;">
     {{ post.body|safe}}
 </div>
 <hr>
 
 <div style="display: flex; flex-direction:row; justify-content: space-between;">
-    <div style="font-size: 15px; display: flex; flex-direction:row; "> 
+    <div style="font-size: 15px; display: flex; flex-direction:row; ">
         <div>
             <form action="{% url 'like_post' post.pk %}" method="POST" style="margin-right:20px ;">
                 {% csrf_token %}
-                
+
                 {% if user.is_authenticated %}
-                
+
                 {% if liked%}
                 <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary">REMOVE</button>
                 {% else %}
@@ -70,24 +75,24 @@
                 {% else %}
                 <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary">UNLIKE</button>
                 {% endif%}
-                
+
                 - {{ total_unlikes}}
-                
-                
+
+
             </form>
         </div>
-        </div>
-        <div style="font-size: 15px; margin-top:15px;">
-            <button class="btn btn-primary" >
+    </div>
+    <div style="font-size: 15px; margin-top:15px;">
+        <button class="btn btn-primary">
             <a href="{% url 'home' %}" style="color: white;"> Back</a>
         </button>
     </div>
 </div>
 
-<br/>
-<br/>
-<br/>
-<br/>
+<br />
+<br />
+<br />
+<br />
 
 
 {% endblock %}

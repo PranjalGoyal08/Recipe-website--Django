@@ -6,7 +6,23 @@ from django.urls import reverse
 from datetime import datetime, date
 from ckeditor.fields import RichTextField
 
+
+
+INGRIDENT_CHOICES = (
+    ("salt", "Salt"),
+    ("sugar", "Sugar"),
+    ("flour", "Flour"),
+    ("turmeric", "Turmeri"),
+    ("cocopowder", "Coco Powder"),
+    ("milk", "Milk"),
+    ("bakingpowder", "Baking Powder"),
+    # ("8", "8"),
+)
+
+
+
 class Post(models.Model):
+    
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete= models.CASCADE)
     recipe_image= models.ImageField(null=True, blank= True, upload_to= "images/")
@@ -17,6 +33,8 @@ class Post(models.Model):
     post_date= models.DateField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name="recipe_post")
     unlikes = models.ManyToManyField(User, related_name="unlike_post")
+
+
 
 
     def __str__(self):
@@ -30,3 +48,41 @@ class Post(models.Model):
 
     def total_unlikes(self):
         return self.unlikes.count()
+
+class Ingrident(models.Model):
+    name= models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return self.name
+
+# ingridentname = Ingridentnames.objects.all()
+# list=[]
+# for i in ingridentname:
+#     list.append(str(i))
+# # print(list)
+# # tuple1 = tuple(i for i in list)
+# # print(tuple1)
+# tuple2= tuple(zip(list,list))
+# print(tuple2)
+
+
+class RecipeIngrident(models.Model):
+    ingredient = models.CharField(max_length=50, choices=INGRIDENT_CHOICES, null=True)
+    quantity= models.FloatField()
+    unit = models.CharField(max_length=5)
+
+    recipe = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='ingrident', null=True)
+    
+    def __str__(self):
+        return self.ingredient
+
+    def getQuantity(self):    
+        return str(self.quantity)
+
+    def getUnit(self):
+        return str(self.unit)
+    
+    def get_recipe(self):
+        return self.recipe
+
+    

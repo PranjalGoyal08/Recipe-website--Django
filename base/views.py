@@ -1,11 +1,13 @@
-from audioop import reverse
+from json import JSONDecoder
+from django.db import transaction
+import imp
 from multiprocessing import context
-from turtle import pos
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,  redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from . models import Post
-from .forms import PostForm, EditForm
+from . models import Post,RecipeIngrident
+from  base import models
+from .forms import PostForm, EditForm, IngredientFormSet
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
@@ -18,12 +20,34 @@ class HomeView(ListView):
 
 class ArticleDetailView(DetailView):
     model= Post
-    template_name = 'article_detail.html'
+    # context_object_name= 'article-detail'
+    
 
+    template_name = 'article_detail.html'
+    # queryset= Post
     def get_context_data(self, *args, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         stuff= get_object_or_404(Post, id=self.kwargs['pk'])
-        
+        # ingdData = RecipeIngrident.objects.all()
+        # ingdetail= ingdData[0].get_recipe()
+        # print("DEBUG2: ", ingdetail)
+        # # for ingDa in ingdData:
+        # #     print("Debug2: ", ingDa)
+        ingrident_info=[]
+        ingdData = RecipeIngrident.objects.all()
+        postData = Post.objects.get(id=self.kwargs['pk'])
+
+        # unit= ingdData[0].unit()
+        # print(unit)
+        for i in range (len(ingdData)):
+            if(ingdData[i].get_recipe()==postData):
+                # print("Debug : ", ingdData[i])
+                # print("Debug: ", )
+
+                ingrident_info.append({'name':str(ingdData[i]), 'unit':ingdData[i].getUnit(), 'quantity':str(ingdData[i].getQuantity())})
+        # print(ingrident_info)
+        # print(len(ingrident_info))
+        context["ingrident_info"]=ingrident_info
         liked= False
         if stuff.likes.filter(id=self.request.user.id).exists():
             liked= True
@@ -33,6 +57,7 @@ class ArticleDetailView(DetailView):
             unliked= True
 
         total_unlikes= stuff.total_unlikes()
+        # print(total_unlikes)
         context["total_unlikes"] = total_unlikes
         context["unliked"]=unliked
 
@@ -94,3 +119,19 @@ def UnlikeView(request, pk):
         unliked= True
 
     return HttpResponseRedirect(reverse('article-detail', args=[str(pk)]))
+
+def create_ingrident_recipe(request):
+    if request.method == "GET":
+        form = PostForm()
+        formset = IngredientFormSet()
+        return render(request, 'addingrident.html', {"form":form, "formset":formset})
+    elif request.method =="POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            recipe = form.save()
+            formset = IngredientFormSet(request.POST, instance=recipe)
+            if formset.is_valid():
+                formset.save()
+            return redirect('/')
+        else:
+            return render(request, 'addingrident.html', {"form":form})
