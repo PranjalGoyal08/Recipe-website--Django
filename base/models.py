@@ -27,7 +27,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete= models.CASCADE)
     recipe_image= models.ImageField(null=True, blank= True, upload_to= "images/")
     # ingridents = models.TextField()
-    ingridents= RichTextField(blank=  True, null= True)
+    # ingridents= RichTextField(blank=  True, null= True)
     body= RichTextField(blank=  True, null= True)
     description = models.CharField(max_length=800)
     post_date= models.DateField(auto_now_add=True)
