@@ -28,6 +28,23 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         stuff= get_object_or_404(Post, id=self.kwargs['pk'])
+        liked= False
+        if stuff.likes.filter(id=self.request.user.id).exists():
+            liked= True
+
+        unliked= False
+        if stuff.unlikes.filter(id=self.request.user.id).exists():
+            unliked= True
+
+        total_unlikes= stuff.total_unlikes()
+        # print(total_unlikes)
+        context["total_unlikes"] = total_unlikes
+        context["unliked"]=unliked
+
+
+        total_likes= stuff.total_likes()
+        context["total_likes"] = total_likes
+        context["liked"]=liked
         # ingdData = RecipeIngrident.objects.all()
         # ingdetail= ingdData[0].get_recipe()
         # print("DEBUG2: ", ingdetail)
@@ -48,23 +65,6 @@ class ArticleDetailView(DetailView):
         # print(ingrident_info)
         # print(len(ingrident_info))
         context["ingrident_info"]=ingrident_info
-        liked= False
-        if stuff.likes.filter(id=self.request.user.id).exists():
-            liked= True
-
-        unliked= False
-        if stuff.unlikes.filter(id=self.request.user.id).exists():
-            unliked= True
-
-        total_unlikes= stuff.total_unlikes()
-        # print(total_unlikes)
-        context["total_unlikes"] = total_unlikes
-        context["unliked"]=unliked
-
-
-        total_likes= stuff.total_likes()
-        context["total_likes"] = total_likes
-        context["liked"]=liked
         return context
 
 

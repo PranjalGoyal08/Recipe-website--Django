@@ -8,16 +8,16 @@ from ckeditor.fields import RichTextField
 
 
 
-INGRIDENT_CHOICES = (
-    ("salt", "Salt"),
-    ("sugar", "Sugar"),
-    ("flour", "Flour"),
-    ("turmeric", "Turmeri"),
-    ("cocopowder", "Coco Powder"),
-    ("milk", "Milk"),
-    ("bakingpowder", "Baking Powder"),
-    # ("8", "8"),
-)
+# INGRIDENT_CHOICES = (
+#     ("salt", "Salt"),
+#     ("sugar", "Sugar"),
+#     ("flour", "Flour"),
+#     ("turmeric", "Turmeri"),
+#     ("cocopowder", "Coco Powder"),
+#     ("milk", "Milk"),
+#     ("bakingpowder", "Baking Powder"),
+#     # ("8", "8"),
+# )
 
 
 
@@ -31,8 +31,8 @@ class Post(models.Model):
     body= RichTextField(blank=  True, null= True)
     description = models.CharField(max_length=800)
     post_date= models.DateField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name="recipe_post")
-    unlikes = models.ManyToManyField(User, related_name="unlike_post")
+    likes = models.ManyToManyField(User, related_name="recipe_post", blank=True)
+    unlikes = models.ManyToManyField(User, related_name="unlike_post", blank=True)
 
 
 
@@ -67,14 +67,14 @@ class Ingrident(models.Model):
 
 
 class RecipeIngrident(models.Model):
-    ingredient = models.CharField(max_length=50, choices=INGRIDENT_CHOICES, null=True)
+    ingredient = models.ForeignKey(Ingrident, on_delete=models.CASCADE, related_name='ingrident', null=True)
     quantity= models.FloatField()
     unit = models.CharField(max_length=5)
 
     recipe = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='ingrident', null=True)
     
     def __str__(self):
-        return self.ingredient
+        return str(self.ingredient)
 
     def getQuantity(self):    
         return str(self.quantity)
