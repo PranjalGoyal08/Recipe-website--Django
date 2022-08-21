@@ -54,6 +54,8 @@ class Ingrident(models.Model):
 
     def __str__(self):
         return self.name
+    def get_absolute_url(self):
+        return reverse('home')
 
 # ingridentname = Ingridentnames.objects.all()
 # list=[]

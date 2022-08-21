@@ -12,7 +12,7 @@
 <div style="display: flex; flex-direction:row; justify-content: space-between;">
     <div style="font-size: 15px;">
         {% if user.is_authenticated %}
-        {%if user.id == post.author.id %}
+        {%if user.id == post.author.id%}
         <button class="btn btn-primary">
             <a href="{% url 'update-recipe' post.pk %}" style="color: white; text-decoration: none;">Edit</a>
         </button>

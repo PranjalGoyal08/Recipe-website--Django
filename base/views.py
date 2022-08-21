@@ -5,9 +5,9 @@ from multiprocessing import context
 from django.shortcuts import render, get_object_or_404,  redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from . models import Post,RecipeIngrident
+from . models import Ingrident, Post,RecipeIngrident
 from  base import models
-from .forms import PostForm, EditForm, IngredientFormSet
+from .forms import PostForm, EditForm, IngredientFormSet, IngridentForm
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
@@ -41,7 +41,6 @@ class ArticleDetailView(DetailView):
         context["total_unlikes"] = total_unlikes
         context["unliked"]=unliked
 
-
         total_likes= stuff.total_likes()
         context["total_likes"] = total_likes
         context["liked"]=liked
@@ -53,7 +52,7 @@ class ArticleDetailView(DetailView):
         ingrident_info=[]
         ingdData = RecipeIngrident.objects.all()
         postData = Post.objects.get(id=self.kwargs['pk'])
-
+        
         # unit= ingdData[0].unit()
         # print(unit)
         for i in range (len(ingdData)):
@@ -68,10 +67,10 @@ class ArticleDetailView(DetailView):
         return context
 
 
-class AddRecipeView(CreateView):
-    model= Post
-    form_class = PostForm
-    template_name = 'addRecipe.html'
+class AddIngridentView(CreateView):
+    model= Ingrident
+    form_class = IngridentForm
+    template_name = 'addIngridents.html'
     #fields = '__all__'
     #fields = ('title','body')
 
@@ -124,7 +123,7 @@ def create_ingrident_recipe(request):
     if request.method == "GET":
         form = PostForm()
         formset = IngredientFormSet()
-        return render(request, 'addingrident.html', {"form":form, "formset":formset})
+        return render(request, 'addRecipe.html', {"form":form, "formset":formset})
     elif request.method =="POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -134,4 +133,4 @@ def create_ingrident_recipe(request):
                 formset.save()
             return redirect('/')
         else:
-            return render(request, 'addingrident.html', {"form":form})
+            return render(request, 'addRecipe.html', {"form":form})

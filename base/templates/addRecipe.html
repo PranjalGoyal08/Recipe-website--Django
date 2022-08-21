@@ -13,6 +13,15 @@
 
         {{form.media}}
         {{form.as_p}}
+        <br>
+        <hr>
+        <br>
+        <h2>Add Ingredients</h2>
+        {{ formset.management_form }}
+        {% for form in formset %}
+           {{ form }}
+           <br>
+        {% endfor %}
         <button class="btn btn-secondary">Post</button>
 </div>
 
@@ -26,3 +35,4 @@
 {% endif %}
 
 {% endblock %}
+

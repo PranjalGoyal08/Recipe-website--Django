@@ -26,13 +26,15 @@
           <ul class="navbar-nav mr-auto" style="margin-left: 50px;">
             
             {% if user.is_authenticated %}
+            {% if user.id == 1%}
             <li class="nav-item mr-3">
-              <a class="nav-link" href="{% url 'add_recipe' %}" style="color: rgb(242, 163, 4);">Add Recipe</a>
+              <a class="nav-link" href="{% url 'add_Ingrident' %}" style="color: rgb(242, 163, 4);">Add Ingrident</a>
             </li>
+            {% endif %}
             <li class="nav-item mr-3">
-              <a class="nav-link" href="{% url 'addingrident' %}" style="color: rgb(242, 163, 4);">Add Ingrident</a>
+              <a class="nav-link" href="{% url 'add-recipe' %}" style="color: rgb(242, 163, 4);">Add Recipe</a>
             </li>
-
+            
             <li class="nav-item mr-3">
               <a class="nav-link" href="{% url 'logout' %}" style="color: rgb(242, 163, 4);">Logout</a>
             </li>
