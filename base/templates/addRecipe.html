@@ -8,7 +8,7 @@
 </h1>
 <div class="form-group">
 
-    <form method="POST">
+    <form id="form-container" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{form.media}}
@@ -19,15 +19,44 @@
         <h2>Add Ingredients</h2>
         {{ formset.management_form }}
         {% for form in formset %}
-           {{ form }}
-           <br>
+        <div class="recipe-form">
+            {{ form }}
+            <br>
+            <br>
+        </div>
         {% endfor %}
+        <button id="add-form"  class="btn btn-light" type="button" style="border:1px solid rgb(194, 194, 194); margin-bottom: 20px;">Add Another Ingrident</button>
+        <br>
         <button class="btn btn-secondary">Post</button>
 </div>
 
+
+<script type="text/javascript" src="/static/javascripts/jquery.formset.js"></script>
 <script>
     var name = "{{ user.id }}";
     document.getElementById('elder').value=name;
+
+        let recipeForm = document.querySelectorAll(".recipe-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_ingrident-TOTAL_FORMS")
+
+        let formNum = recipeForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = recipeForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            
+            totalForms.setAttribute('value', `${formNum+1}`)
+        }
+
 </script>
 {% else %}
 <p>You are not LogedIn/Register</p>

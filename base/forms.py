@@ -30,7 +30,7 @@ class RecipeIngridentForm(forms.ModelForm):
     class Meta:
         model = RecipeIngrident
         exclude=('recipe',)
-IngredientFormSet =inlineformset_factory(Post, RecipeIngrident, form=RecipeIngridentForm, can_delete=True, extra=6)
+IngredientFormSet =inlineformset_factory(Post, RecipeIngrident, form=RecipeIngridentForm, can_delete=True, extra=1)
 
 
 class EditForm(forms.ModelForm):

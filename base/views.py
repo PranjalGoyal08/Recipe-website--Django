@@ -52,12 +52,12 @@ class ArticleDetailView(DetailView):
         ingrident_info=[]
         ingdData = RecipeIngrident.objects.all()
         postData = Post.objects.get(id=self.kwargs['pk'])
-        
+    
         # unit= ingdData[0].unit()
         # print(unit)
         for i in range (len(ingdData)):
             if(ingdData[i].get_recipe()==postData):
-                # print("Debug : ", ingdData[i])
+                print("Debug : ", ingdData[i])
                 # print("Debug: ", )
 
                 ingrident_info.append({'name':str(ingdData[i]), 'unit':ingdData[i].getUnit(), 'quantity':str(ingdData[i].getQuantity())})
@@ -125,7 +125,7 @@ def create_ingrident_recipe(request):
         formset = IngredientFormSet()
         return render(request, 'addRecipe.html', {"form":form, "formset":formset})
     elif request.method =="POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             recipe = form.save()
             formset = IngredientFormSet(request.POST, instance=recipe)
@@ -134,3 +134,4 @@ def create_ingrident_recipe(request):
             return redirect('/')
         else:
             return render(request, 'addRecipe.html', {"form":form})
+ 
